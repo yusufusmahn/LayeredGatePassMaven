@@ -50,6 +50,17 @@ public class Mapper {
         return visitor;
     }
 
+
+    public static GenerateAccessCodeResponse mapToGenerateAccessCodeResponse(AccessCode accessCode) {
+        GenerateAccessCodeResponse response = new GenerateAccessCodeResponse();
+        response.setAccessCode(accessCode.getCode());
+        response.setResidentId(accessCode.getResident().getId());
+        response.setExpiresAt(accessCode.getExpiresAt());
+        response.setWhomToSee(accessCode.getWhomToSee());
+        response.setVisitor(mapToVisitorResponse(accessCode.getVisitor()));
+        return response;
+    }
+
     public static AccessCode mapToAccessCode(GenerateAccessCodeRequest request, String code, Resident resident, Visitor visitor) {
         AccessCode accessCode = new AccessCode();
         accessCode.setCode(code);
@@ -60,16 +71,6 @@ public class Mapper {
         accessCode.setWhomToSee(toSentenceCase(request.getWhomToSee()));
         accessCode.setVisitor(visitor);
         return accessCode;
-    }
-
-    public static GenerateAccessCodeResponse mapToGenerateAccessCodeResponse(AccessCode accessCode) {
-        GenerateAccessCodeResponse response = new GenerateAccessCodeResponse();
-        response.setAccessCode(accessCode.getCode());
-        response.setResidentId(accessCode.getResident().getId());
-        response.setExpiresAt(accessCode.getExpiresAt());
-        response.setWhomToSee(accessCode.getWhomToSee());
-        response.setVisitor(mapToVisitorResponse(accessCode.getVisitor()));
-        return response;
     }
 
     public static FindAccessCodeResponse mapToFindAccessCodeResponse(AccessCode accessCode) {
