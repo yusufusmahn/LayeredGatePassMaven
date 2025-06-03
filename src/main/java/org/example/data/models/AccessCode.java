@@ -18,6 +18,7 @@ public class AccessCode {
     private String code;
     @DBRef
     private Resident resident;
+    private String email;
     private boolean isUsed;
     private LocalDateTime CreatedAt;
     private LocalDateTime expiresAt;

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class FindAccessCodeResponse {
     private String residentId;
+//    private String email;
     private String code;
     private LocalDateTime expiresAt;
     private boolean isUsed;

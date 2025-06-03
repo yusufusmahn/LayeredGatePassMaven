@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface AccessCodes extends MongoRepository<AccessCode, String> {
     Optional<AccessCode> findByResidentAndCode(Resident resident, String accessToken);
     List<AccessCode> findByResident(Resident resident);
+    Optional<AccessCode> findByEmailAndCode(String email, String accessToken);
+    List<AccessCode> findByResidentEmail(String email);
+
 }
