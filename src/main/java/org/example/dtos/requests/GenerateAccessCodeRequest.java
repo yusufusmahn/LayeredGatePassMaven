@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class GenerateAccessCodeRequest {
     private String residentId;
+    private String email;
     private int durationInHours;
     private String visitorName;
     private String visitorEmail;

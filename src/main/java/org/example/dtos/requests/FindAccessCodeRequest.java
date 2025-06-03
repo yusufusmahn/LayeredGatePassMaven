@@ -6,4 +6,5 @@ import lombok.Data;
 public class FindAccessCodeRequest {
     private String residentId;
     private String code;
+    private String email;
 }
