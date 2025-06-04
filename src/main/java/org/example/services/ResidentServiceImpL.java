@@ -31,7 +31,7 @@ public class ResidentServiceImpL implements ResidentService {
     public RegisterResidentResponse registerResident(RegisterResidentRequest request) {
         String email = Mapper.toLowerCaseEmail(request.getEmail());
         if (residents.existsByEmail(email)) {
-            throw new ResidentExistsException("Email " + email + " is already registered");
+            throw new ResidentExistsException("Email: " + email + " is already registered");
         }
         Resident resident = Mapper.mapToResident(request);
         residents.save(resident);

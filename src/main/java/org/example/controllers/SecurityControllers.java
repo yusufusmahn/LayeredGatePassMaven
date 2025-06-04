@@ -28,6 +28,7 @@ public class SecurityControllers {
         }
     }
 
+
     @PostMapping("/securities/login")
     public ResponseEntity<ApiResponse> loginSecurity(@RequestBody LoginRequest request) {
         try {
@@ -37,6 +38,7 @@ public class SecurityControllers {
             return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
     }
+
 
     @PostMapping("/access-codes/verify")
     public ResponseEntity<ApiResponse> verifyAccessCode(@RequestBody FindAccessCodeRequest request) {

@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api")
+//@CrossOrigin(origins = "*")
+//@CrossOrigin("*")
 public class ResidentControllers {
 
     @Autowired
