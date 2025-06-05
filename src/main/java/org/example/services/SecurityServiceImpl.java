@@ -37,7 +37,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public FindAccessCodeResponse verifyAccessCode(VerifyAccessCodeRequest request) {
+    public VerifyAccessCodeResponse verifyAccessCode(VerifyAccessCodeRequest request) {
 //        Resident resident = residents.findById(request.getResidentId())
 //                .orElseThrow(() -> new InvalidAccessCodeException("Resident not found"));
         AccessCode accessCode = accessCodes.findByCode(request.getAccessCode())
@@ -56,7 +56,7 @@ public class SecurityServiceImpl implements SecurityService {
         if (accessCode.getVisitor() == null) {
             throw new InvalidAccessCodeException("Visitor not found");
         }
-        return Mapper.mapToFindAccessCodeResponse(accessCode);
+        return Mapper.mapToVerifyAccessCodeResponse(accessCode);
     }
 
     @Override

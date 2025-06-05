@@ -5,13 +5,12 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class VerifyAccessCodeResponse {
+public class UsedAccessCodeResponse {
     private String code;
     private LocalDateTime expiresAt;
-    private boolean isUsed;
+    private boolean used;
+    private String whomToSee;
     private String visitorName;
     private String visitorEmail;
     private String visitorPhone;
-    private String whomToSee;
-
 }

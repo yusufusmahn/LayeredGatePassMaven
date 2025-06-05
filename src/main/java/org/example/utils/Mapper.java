@@ -75,7 +75,7 @@ public class Mapper {
 
     public static FindAccessCodeResponse mapToFindAccessCodeResponse(AccessCode accessCode) {
         FindAccessCodeResponse response = new FindAccessCodeResponse();
-//        response.setResidentId(accessCode.getResident().getId());
+        response.setResidentId(accessCode.getResident().getId());
         response.setCode(accessCode.getCode());
         response.setExpiresAt(accessCode.getExpiresAt());
         response.setUsed(accessCode.isUsed());
@@ -134,6 +134,18 @@ public class Mapper {
             }
         }
         return result;
+    }
+
+    public static VerifyAccessCodeResponse mapToVerifyAccessCodeResponse(AccessCode accessCode) {
+        VerifyAccessCodeResponse response = new VerifyAccessCodeResponse();
+        response.setCode(accessCode.getCode());
+        response.setExpiresAt(accessCode.getExpiresAt());
+        response.setUsed(accessCode.isUsed());
+        response.setWhomToSee(accessCode.getWhomToSee());
+        response.setVisitorName(accessCode.getVisitor().getName());
+        response.setVisitorEmail(accessCode.getVisitor().getEmail());
+        response.setVisitorPhone(accessCode.getVisitor().getPhone());
+        return response;
     }
 
 

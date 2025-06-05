@@ -3,12 +3,13 @@ package org.example.services;
 import org.example.data.repositories.*;
 import org.example.dtos.requests.*;
 import org.example.dtos.responses.*;
-import org.example.exceptions.*;
+import org.example.exceptions.EmailAlreadyExistsException;
+import org.example.exceptions.InvalidAccessCodeException;
+import org.example.exceptions.InvalidLoginException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,11 +35,16 @@ public class SecurityServiceImplTest {
     private ResidentService residentService;
 
     private RegisterSecurityRequest registerRequest;
-    private FindAccessCodeRequest findAccessCodeRequest;
+    private VerifyAccessCodeRequest verifyAccessCodeRequest;
     private LoginRequest loginRequest;
 
     @BeforeEach
     void setUp() {
+        securities.deleteAll();
+        residents.deleteAll();
+        visitors.deleteAll();
+        accessCodes.deleteAll();
+
         registerRequest = new RegisterSecurityRequest();
         registerRequest.setName("security");
         registerRequest.setEmail("security@gmail.com");
@@ -48,14 +54,7 @@ public class SecurityServiceImplTest {
         loginRequest.setEmail("security@gmail.com");
         loginRequest.setPassword("securepass");
 
-        findAccessCodeRequest = new FindAccessCodeRequest();
-        findAccessCodeRequest.setCode("123456");
-
-        securities.deleteAll();
-        residents.deleteAll();
-        visitors.deleteAll();
-        accessCodes.deleteAll();
-
+        verifyAccessCodeRequest = new VerifyAccessCodeRequest();
         RegisterResidentRequest residentRequest = new RegisterResidentRequest();
         residentRequest.setName("resident");
         residentRequest.setEmail("resident@gmail.com");
@@ -73,8 +72,7 @@ public class SecurityServiceImplTest {
         generateRequest.setWhomToSee("Security");
         GenerateAccessCodeResponse accessCodeResponse = residentService.generateAccessCode(generateRequest);
 
-//        findAccessCodeRequest.setResidentId(residentResponse.getId());
-        findAccessCodeRequest.setCode(accessCodeResponse.getAccessCode());
+        verifyAccessCodeRequest.setAccessCode(accessCodeResponse.getAccessCode());
     }
 
     @Test
@@ -91,20 +89,20 @@ public class SecurityServiceImplTest {
         assertThrows(EmailAlreadyExistsException.class, () -> securityService.registerSecurity(registerRequest));
     }
 
-
     @Test
     void testVerifyAccessCode_Valid() {
-        FindAccessCodeResponse response = securityService.verifyAccessCode(findAccessCodeRequest);
+        VerifyAccessCodeResponse response = securityService.verifyAccessCode(verifyAccessCodeRequest);
         assertNotNull(response);
         assertTrue(response.isUsed());
-        assertNotNull(response.getVisitor());
-        assertEquals("Bello", response.getVisitor().getName());
+        assertEquals("Bello", response.getVisitorName());
+        assertEquals("bello@gmail.com", response.getVisitorEmail());
+        assertEquals("0987654321", response.getVisitorPhone());
     }
 
     @Test
     void testVerifyAccessCode_InvalidCode() {
-        findAccessCodeRequest.setCode("invalidCode");
-        assertThrows(InvalidAccessCodeException.class, () -> securityService.verifyAccessCode(findAccessCodeRequest));
+        verifyAccessCodeRequest.setAccessCode("invalidCode");
+        assertThrows(InvalidAccessCodeException.class, () -> securityService.verifyAccessCode(verifyAccessCodeRequest));
     }
 
     @Test
@@ -113,6 +111,7 @@ public class SecurityServiceImplTest {
         LoginResponse response = securityService.login(loginRequest);
         assertNotNull(response);
         assertEquals("security@gmail.com", response.getEmail());
+        assertEquals("SECURITY", response.getRole());
     }
 
     @Test

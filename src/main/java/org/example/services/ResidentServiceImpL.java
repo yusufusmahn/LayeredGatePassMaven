@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,6 @@ public class ResidentServiceImpL implements ResidentService {
         Visitor visitor = Mapper.mapToVisitor(request);
         Visitor savedVisitor = visitors.save(visitor);
 
-//      String code = String.format("%06d", new Random().nextInt(999999));
         String code = generateAccessCode();
         AccessCode accessCode = Mapper.mapToAccessCode(request, code, resident, savedVisitor);
         accessCodes.save(accessCode);
@@ -71,9 +71,12 @@ public class ResidentServiceImpL implements ResidentService {
         Resident resident = residents.findById(request.getResidentId())
                 .orElseThrow(() -> new ResidentDoesNotExistException("Resident not found"));
         AccessCode accessCode = accessCodes.findByResidentAndCode(resident, request.getCode())
-                .orElseThrow(() -> new ResidentDoesNotExistException("Access code not found"));
+                .orElseThrow(() -> new AccessCodeNotFoundException("Access code not found"));
+        if (LocalDateTime.now().isAfter(accessCode.getExpiresAt())) {
+            throw new AccessCodeNotFoundException("Access code has expired");
+        }
         if (accessCode.getVisitor() == null) {
-            throw new ResidentDoesNotExistException("Visitor not found");
+            throw new AccessCodeNotFoundException("Visitor not found");
         }
         return Mapper.mapToFindAccessCodeResponse(accessCode);
     }
