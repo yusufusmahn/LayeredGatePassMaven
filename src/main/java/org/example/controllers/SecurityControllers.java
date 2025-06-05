@@ -41,7 +41,7 @@ public class SecurityControllers {
 
 
     @PostMapping("/access-codes/verify")
-    public ResponseEntity<ApiResponse> verifyAccessCode(@RequestBody FindAccessCodeRequest request) {
+    public ResponseEntity<ApiResponse> verifyAccessCode(@RequestBody VerifyAccessCodeRequest request) {
         try {
             FindAccessCodeResponse response = securityService.verifyAccessCode(request);
             return new ResponseEntity<>(new ApiResponse(response, true), HttpStatus.OK);

@@ -75,7 +75,7 @@ public class Mapper {
 
     public static FindAccessCodeResponse mapToFindAccessCodeResponse(AccessCode accessCode) {
         FindAccessCodeResponse response = new FindAccessCodeResponse();
-        response.setResidentId(accessCode.getResident().getId());
+//        response.setResidentId(accessCode.getResident().getId());
         response.setCode(accessCode.getCode());
         response.setExpiresAt(accessCode.getExpiresAt());
         response.setUsed(accessCode.isUsed());

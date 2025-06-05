@@ -37,10 +37,10 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public FindAccessCodeResponse verifyAccessCode(FindAccessCodeRequest request) {
-        Resident resident = residents.findById(request.getResidentId())
-                .orElseThrow(() -> new InvalidAccessCodeException("Resident not found"));
-        AccessCode accessCode = accessCodes.findByResidentAndCode(resident, request.getCode())
+    public FindAccessCodeResponse verifyAccessCode(VerifyAccessCodeRequest request) {
+//        Resident resident = residents.findById(request.getResidentId())
+//                .orElseThrow(() -> new InvalidAccessCodeException("Resident not found"));
+        AccessCode accessCode = accessCodes.findByCode(request.getAccessCode())
                 .orElseThrow(() -> new InvalidAccessCodeException("Access code not found"));
 
         if (accessCode.isUsed()) {

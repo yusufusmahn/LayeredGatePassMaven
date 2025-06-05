@@ -12,5 +12,6 @@ public interface AccessCodes extends MongoRepository<AccessCode, String> {
     List<AccessCode> findByResident(Resident resident);
     Optional<AccessCode> findByEmailAndCode(String email, String accessToken);
     List<AccessCode> findByResidentEmail(String email);
+    Optional<AccessCode> findByCode(String accessCode);
 
 }

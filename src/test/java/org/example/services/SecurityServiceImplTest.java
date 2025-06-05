@@ -73,7 +73,7 @@ public class SecurityServiceImplTest {
         generateRequest.setWhomToSee("Security");
         GenerateAccessCodeResponse accessCodeResponse = residentService.generateAccessCode(generateRequest);
 
-        findAccessCodeRequest.setResidentId(residentResponse.getId());
+//        findAccessCodeRequest.setResidentId(residentResponse.getId());
         findAccessCodeRequest.setCode(accessCodeResponse.getAccessCode());
     }
 
