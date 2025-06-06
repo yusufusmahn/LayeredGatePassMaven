@@ -9,7 +9,7 @@ public class FindAccessCodeResponse {
     private String residentId;
 //    private String email;
     private String code;
-    private LocalDateTime expiresAt;
+    private String expiresAt;
     private boolean isUsed;
     private VisitorResponse visitor;
     private String whomToSee;

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class GenerateAccessCodeResponse {
     private String accessCode;
     private String residentId;
-    private LocalDateTime expiresAt;
+    private String expiresAt;
     private VisitorResponse visitor;
     private String whomToSee;
 

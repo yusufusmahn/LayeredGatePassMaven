@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
@@ -36,11 +38,11 @@ public class SecurityServiceImpl implements SecurityService {
         return Mapper.mapToRegisterSecurityResponse(savedSecurity);
     }
 
+
     @Override
     public VerifyAccessCodeResponse verifyAccessCode(VerifyAccessCodeRequest request) {
-//        Resident resident = residents.findById(request.getResidentId())
-//                .orElseThrow(() -> new InvalidAccessCodeException("Resident not found"));
-        AccessCode accessCode = accessCodes.findByCode(request.getAccessCode())
+        String code = request.getAccessCode().trim();
+        AccessCode accessCode = accessCodes.findByCode(code)
                 .orElseThrow(() -> new InvalidAccessCodeException("Access code not found"));
 
         if (accessCode.isUsed()) {
@@ -68,4 +70,22 @@ public class SecurityServiceImpl implements SecurityService {
         }
         return Mapper.mapToLoginResponse(security);
     }
+
+
+    @Override
+    public List<UsedAccessCodeResponse> getAllUsedAccessCodes() {
+        List<AccessCode> allAccessCodes = accessCodes.findAll();
+        List<UsedAccessCodeResponse> usedAccessCodes = new ArrayList<>();
+
+        for (AccessCode accessCode : allAccessCodes) {
+            if (accessCode.isUsed()) {
+                UsedAccessCodeResponse response = Mapper.mapToUsedAccessCodeResponse(accessCode);
+                usedAccessCodes.add(response);
+            }
+        }
+
+        return usedAccessCodes;
+    }
+
+
 }

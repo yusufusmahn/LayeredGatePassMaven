@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class VerifyAccessCodeResponse {
     private String code;
-    private LocalDateTime expiresAt;
+    private String expiresAt;
     private boolean isUsed;
     private String visitorName;
     private String visitorEmail;

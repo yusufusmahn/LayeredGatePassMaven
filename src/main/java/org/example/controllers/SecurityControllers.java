@@ -3,13 +3,12 @@ package org.example.controllers;
 import org.example.dtos.requests.*;
 import org.example.dtos.responses.*;
 import org.example.exceptions.*;
-import org.example.services.SecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.services.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -48,6 +47,15 @@ public class SecurityControllers {
         } catch (GatePassException e) {
             return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/access-codes/used")
+    public ResponseEntity<ApiResponse> getAllUsedAccessCodes() {
+        try {
+            List<UsedAccessCodeResponse> response = securityService.getAllUsedAccessCodes();
+            return new ResponseEntity<>(new ApiResponse(response, true), HttpStatus.OK);
+        } catch (GatePassException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);}
     }
 }
 

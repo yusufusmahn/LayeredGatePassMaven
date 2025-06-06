@@ -4,8 +4,11 @@ import org.example.data.models.*;
 import org.example.dtos.requests.*;
 import org.example.dtos.responses.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Mapper {
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     public static Resident mapToResident(RegisterResidentRequest request) {
         Resident resident = new Resident();
@@ -38,7 +41,6 @@ public class Mapper {
         response.setId(security.getId());
         response.setName(security.getName());
         response.setEmail(security.getEmail());
-//        response.setRole("SECURITY");
         return response;
     }
 
@@ -50,12 +52,11 @@ public class Mapper {
         return visitor;
     }
 
-
     public static GenerateAccessCodeResponse mapToGenerateAccessCodeResponse(AccessCode accessCode) {
         GenerateAccessCodeResponse response = new GenerateAccessCodeResponse();
         response.setAccessCode(accessCode.getCode());
         response.setResidentId(accessCode.getResident().getId());
-        response.setExpiresAt(accessCode.getExpiresAt());
+        response.setExpiresAt(accessCode.getExpiresAt().format(DATE_TIME_FORMATTER));
         response.setWhomToSee(accessCode.getWhomToSee());
         response.setVisitor(mapToVisitorResponse(accessCode.getVisitor()));
         return response;
@@ -77,7 +78,7 @@ public class Mapper {
         FindAccessCodeResponse response = new FindAccessCodeResponse();
         response.setResidentId(accessCode.getResident().getId());
         response.setCode(accessCode.getCode());
-        response.setExpiresAt(accessCode.getExpiresAt());
+        response.setExpiresAt(accessCode.getExpiresAt().format(DATE_TIME_FORMATTER));
         response.setUsed(accessCode.isUsed());
         response.setWhomToSee(accessCode.getWhomToSee());
         response.setVisitor(mapToVisitorResponse(accessCode.getVisitor()));
@@ -139,7 +140,7 @@ public class Mapper {
     public static VerifyAccessCodeResponse mapToVerifyAccessCodeResponse(AccessCode accessCode) {
         VerifyAccessCodeResponse response = new VerifyAccessCodeResponse();
         response.setCode(accessCode.getCode());
-        response.setExpiresAt(accessCode.getExpiresAt());
+        response.setExpiresAt(accessCode.getExpiresAt().format(DATE_TIME_FORMATTER));
         response.setUsed(accessCode.isUsed());
         response.setWhomToSee(accessCode.getWhomToSee());
         response.setVisitorName(accessCode.getVisitor().getName());
@@ -148,5 +149,15 @@ public class Mapper {
         return response;
     }
 
-
+    public static UsedAccessCodeResponse mapToUsedAccessCodeResponse(AccessCode accessCode) {
+        UsedAccessCodeResponse response = new UsedAccessCodeResponse();
+        response.setCode(accessCode.getCode());
+        response.setExpiresAt(accessCode.getExpiresAt().format(DATE_TIME_FORMATTER));
+        response.setUsed(accessCode.isUsed());
+        response.setWhomToSee(accessCode.getWhomToSee());
+        response.setVisitorName(accessCode.getVisitor().getName());
+        response.setVisitorEmail(accessCode.getVisitor().getEmail());
+        response.setVisitorPhone(accessCode.getVisitor().getPhone());
+        return response;
+    }
 }

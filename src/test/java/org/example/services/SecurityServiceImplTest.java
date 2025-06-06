@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -119,5 +121,40 @@ public class SecurityServiceImplTest {
         securityService.registerSecurity(registerRequest);
         loginRequest.setPassword("wrongpassword");
         assertThrows(InvalidLoginException.class, () -> securityService.login(loginRequest));
+    }
+
+    @Test
+    void testGetAllUsedAccessCodes() {
+        RegisterResidentRequest residentRequest = new RegisterResidentRequest();
+        residentRequest.setName("resident");
+        residentRequest.setEmail("resident123@gmail.com");
+        residentRequest.setPhone("1234567890");
+        residentRequest.setAddress("address");
+        residentRequest.setPassword("password");
+        RegisterResidentResponse residentResponse = residentService.registerResident(residentRequest);
+
+        GenerateAccessCodeRequest generateRequest = new GenerateAccessCodeRequest();
+        generateRequest.setResidentId(residentResponse.getId());
+        generateRequest.setDurationInHours(24);
+        generateRequest.setVisitorName("bello");
+        generateRequest.setVisitorEmail("bello@gmail.com");
+        generateRequest.setVisitorPhone("0987654321");
+        generateRequest.setWhomToSee("Security");
+        GenerateAccessCodeResponse accessCodeResponse = residentService.generateAccessCode(generateRequest);
+
+        VerifyAccessCodeRequest verifyRequest = new VerifyAccessCodeRequest();
+        verifyRequest.setAccessCode(accessCodeResponse.getAccessCode());
+        securityService.verifyAccessCode(verifyRequest);
+
+        List<UsedAccessCodeResponse> response = securityService.getAllUsedAccessCodes();
+
+        assertNotNull(response);
+        assertFalse(response.isEmpty());
+        UsedAccessCodeResponse result = response.get(0);
+        assertEquals(accessCodeResponse.getAccessCode(), result.getCode());
+        assertTrue(result.isUsed());
+        assertEquals("Bello", result.getVisitorName());
+        assertEquals("bello@gmail.com", result.getVisitorEmail());
+        assertEquals("0987654321", result.getVisitorPhone());
     }
 }
